@@ -1,0 +1,40 @@
+SHALLOW COPY vs DEEP COPY
+=========================
+
+SHALLOW COPY
+  Creates a new object, but copies only the references of nested objects,
+  not the objects themselves. Both the original and the copy end up pointing
+  to the same data in memory.
+
+  Result:
+    - Value types (int, bool, struct) → copied independently. Safe.
+    - Immutable types (string)        → copied independently. Safe.
+    - Reference types (List, class)   → SHARED. Changing one affects the other.
+
+  Example:
+    var copy = new PlayerConfig(original.Name, original.Level, original.Skills);
+    copy.Skills.Add("Sword"); // also modifies original.Skills — same list in memory
+
+DEEP COPY
+  Creates a new object AND recursively creates new copies of all nested objects.
+  The original and the copy are fully independent in memory.
+
+  Result:
+    - Value types     → copied independently.
+    - Immutable types → copied independently.
+    - Reference types → NEW instance created. Changes do not affect the original.
+
+  Example:
+    var clone = (PlayerConfigPrototype)MemberwiseClone();
+    clone.Skills = new List<string>(Skills); // new independent list
+    clone.Skills.Add("Sword"); // original.Skills is unaffected
+
+HOW THE PROTOTYPE PATTERN FITS IN
+  The whole purpose of Prototype is to guarantee a deep copy.
+  A clone that shares references with the original is not a real clone —
+  it is just another pointer to the same data.
+
+  Sample 1 → uses MemberwiseClone() for value types + manual deep copy for the List.
+  Sample 2 → uses a copy constructor (Shape source) passed down with base(source),
+             each class copies only its own fields, achieving a deep copy through
+             the inheritance chain.

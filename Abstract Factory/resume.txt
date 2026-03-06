@@ -1,0 +1,64 @@
+ABSTRACT FACTORY PATTERN
+========================
+
+How it works:
+  Defines an interface with multiple factory methods, each creating a different
+  but related product. Concrete factories implement that interface to produce
+  a full family of objects that belong to the same variant. The client depends
+  only on the interface, never on the concrete classes.
+
+  Structure:
+    IAbstractFactory      → declares one method per product type
+    ConcreteFactoryA      → implements all methods for variant A
+    ConcreteFactoryB      → implements all methods for variant B
+    IProductX, IProductY  → interfaces for each individual product
+    Client                → uses IAbstractFactory, unaware of which variant it gets
+
+When to use it:
+  - When you need to create families of related objects that must be used together.
+  - When you want to switch between variants (e.g. regions, themes, environments)
+    without touching the client code.
+  - When you need to enforce consistency — prevent mixing products from
+    different families (e.g. NY dough with FL sauce).
+
+Difference from Factory Method:
+  Factory Method → one abstract method, creates ONE product, subclass decides the type.
+  Abstract Factory → multiple methods, creates a FAMILY of related products.
+
+PROJECT ANALYSIS
+================
+  This project is a correct Abstract Factory implementation. Here is the breakdown:
+
+  Abstract Factory interface:
+    IPizzaIngredientFactory defines 4 creation methods:
+      CreateDough()    → IDough
+      CreateSauce()    → ISauce
+      CreateCheese()   → ICheese
+      CreateVeggies()  → List<IVeggie>
+    This is the core of the pattern — one interface, multiple related products.
+
+  Concrete Factories:
+    NYPizzaIngredientFactory → fully implemented, produces NY-style ingredients:
+      ThinCrustDough, MarinaraSauce, ReggianoCheese, Onion + Garlic
+    FLPizzaIngredientFactory → structure in place but not yet implemented
+      (all methods throw NotImplementedException)
+
+  Products:
+    Each ingredient type has its own interface (IDough, ISauce, ICheese, IVeggie)
+    and concrete implementations per variant (e.g. ReggianoCheese, MarinaraSauce).
+
+  Pizza:
+    Abstract class that holds ingredient interfaces as fields (IDough, ISauce, etc.)
+    Prepare() is abstract — each pizza subclass calls the ingredient factory
+    to build itself with the correct variant ingredients.
+
+  Combined patterns:
+    PizzaStore still uses Factory Method (one abstract CreatePizza() method)
+    to decide which pizza type to instantiate. The Abstract Factory then kicks in
+    inside each pizza's Prepare() to supply the right family of ingredients.
+    Both patterns work together: Factory Method selects the pizza,
+    Abstract Factory builds its ingredients.
+
+  Pending:
+    FLPizzaIngredientFactory needs its methods implemented to complete
+    the Florida variant of the ingredient family.
