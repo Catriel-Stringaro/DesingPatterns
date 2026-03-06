@@ -1,7 +1,0 @@
-﻿En este principio los modulos de alto nivel no deben depender de los modulos de bajo nivel
-a no ser que sesa atravez de una abstraccion.
-
-
-la clase employeesearch(alto nivel) con employeeManager(bajo nivel, solamente se encarga de guardar los datos) tienen un acoplamiento muy alto
-
-estas 2 clases representan 2 modulos de distintos niveles
